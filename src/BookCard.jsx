@@ -18,10 +18,10 @@ function BookCard({ book, onShelfChange }) {
         <h4>{authors.join(' & ')}</h4>
         <p>{pageCount} pages</p>
       </div>
-      <div>{camelToRegularCase(shelf)}</div>
+      {/* <div>{camelToRegularCase(shelf)}</div> */}
 
       <label htmlFor="shelf-select">
-        Move shelf
+        {/* Move shelf */}
         <select
           name="shelves"
           id="shelf-select"

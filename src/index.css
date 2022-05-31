@@ -1,13 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Fanwood+Text:ital@0;1&family=Noto+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Poppins:ital,wght@0,400;0,500;1,400;1,500&display=swap');
+
+:root {
+  --dark: #141417;
+  --primary-dark: #12143d;
+  --primary-regular: #1920b0;
+  --primary-lighter: #7278e8;
+  --gray: #545680;
+  --white: #fff;
+  --heading: 'Poppins', sans-serif;
+  --sub-heading: 'Fanwood Text', serif;
+  --regular-text: 'Noto Sans', sans-serif;
+}
+
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html,
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  padding: 0;
+  height: 100vh;
+  background-color: var(--dark);
+  color: var(--white);
+  font-family: var(--regular-text) sans-serif;
+  line-height: 1.6;
+  font-size: 18px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul,
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd,
+dt,
+form,
+fieldset,
+legend,
+input,
+textarea,
+th,
+td,
+button,
+a {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-family: var(--heading);
+  font-weight: 600;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--sub-heading);
+  font-weight: 400;
+}
+
+p,
+span,
+li {
+  font-family: var(--regular-text);
 }

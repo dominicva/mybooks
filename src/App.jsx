@@ -1,9 +1,11 @@
 import './App.css';
-import data from './mock_data';
+import books from './mock_data';
 import { camelToRegularCase, camelToKebabCase } from './utils/strings';
 
 function BookCard({ book }) {
   const { thumbnail, title, authors, pageCount, shelf } = book;
+  const shelfHeading = camelToRegularCase(shelf);
+  const shelfValue = camelToKebabCase(shelf);
 
   return (
     <div className="book-container">
@@ -16,34 +18,48 @@ function BookCard({ book }) {
         <h4>{authors.join(' & ')}</h4>
         <p>{pageCount} pages</p>
       </div>
-
       <div>{camelToRegularCase(shelf)}</div>
+
+      <label htmlFor="shelf-select">
+        Move shelf
+        <select name="shelves" id="shelf-select">
+          <option value={shelfValue}>{shelfHeading}</option>
+          <option value="want-to-read">Want To Read</option>
+          <option value="read">Read</option>
+        </select>
+      </label>
     </div>
   );
 }
 
-function Shelf({ shelf, children }) {
+function Shelf({ shelf, books }) {
   const shelfHeading = camelToRegularCase(shelf);
   const shelfCssId = camelToKebabCase(shelf);
 
   return (
     <section id={shelfCssId} className="shelf-section">
       <h2>{shelfHeading}</h2>
-      {children.map(child => (
-        <BookCard key={child.id} book={child} />
-      ))}
+      {books.map(book => {
+        return <BookCard key={book.id} book={book} />;
+      })}
     </section>
   );
 }
 
 function App() {
-  const [book1, book2, bk3, bk4, bk5, bk6] = data;
+  const SHELVES = ['currentlyReading', 'wantToRead', 'read'];
 
   return (
     <div className="App">
-      <Shelf shelf="currentlyReading" children={[book1, book2]} />
-      <Shelf shelf="wantToRead" children={[bk3, bk4]} />
-      <Shelf shelf="read" children={[bk5, bk6]} />
+      {SHELVES.map(shelf => {
+        return (
+          <Shelf
+            key={shelf}
+            shelf={shelf}
+            books={books.filter(b => b.shelf === shelf)}
+          ></Shelf>
+        );
+      })}
     </div>
   );
 }

@@ -1,11 +1,12 @@
+import { useState } from 'react';
 import './App.css';
-import books from './mock_data';
+import booksData from './mock_data';
 import { camelToRegularCase, camelToKebabCase } from './utils/strings';
 
-function BookCard({ book }) {
+export const SHELVES = ['currentlyReading', 'wantToRead', 'read'];
+
+function BookCard({ book, onShelfChange }) {
   const { thumbnail, title, authors, pageCount, shelf } = book;
-  const shelfHeading = camelToRegularCase(shelf);
-  const shelfValue = camelToKebabCase(shelf);
 
   return (
     <div className="book-container">
@@ -22,32 +23,53 @@ function BookCard({ book }) {
 
       <label htmlFor="shelf-select">
         Move shelf
-        <select name="shelves" id="shelf-select">
-          <option value={shelfValue}>{shelfHeading}</option>
-          <option value="want-to-read">Want To Read</option>
-          <option value="read">Read</option>
+        <select
+          name="shelves"
+          id="shelf-select"
+          onChange={e => {
+            onShelfChange(book, e.target.value);
+          }}
+        >
+          <option value={camelToKebabCase(shelf)}>
+            {camelToRegularCase(shelf)}
+          </option>
+          {SHELVES.map(shelf => {
+            return (
+              <option key={shelf} value={shelf}>
+                {camelToRegularCase(shelf)}
+              </option>
+            );
+          })}
         </select>
       </label>
     </div>
   );
 }
 
-function Shelf({ shelf, books }) {
+function Shelf({ shelf, books, onShelfChange }) {
   const shelfHeading = camelToRegularCase(shelf);
-  const shelfCssId = camelToKebabCase(shelf);
 
   return (
-    <section id={shelfCssId} className="shelf-section">
+    <section className="shelf-section">
       <h2>{shelfHeading}</h2>
       {books.map(book => {
-        return <BookCard key={book.id} book={book} />;
+        return (
+          <BookCard key={book.id} book={book} onShelfChange={onShelfChange} />
+        );
       })}
     </section>
   );
 }
 
 function App() {
-  const SHELVES = ['currentlyReading', 'wantToRead', 'read'];
+  const [books, setBooks] = useState([...booksData]);
+
+  function handleShelfChange(book, newShelf) {
+    const otherBooks = books.filter(b => b.id !== book.id);
+    const updatedBook = { ...book, shelf: newShelf };
+
+    setBooks([...otherBooks, updatedBook]);
+  }
 
   return (
     <div className="App">
@@ -57,6 +79,7 @@ function App() {
             key={shelf}
             shelf={shelf}
             books={books.filter(b => b.shelf === shelf)}
+            onShelfChange={handleShelfChange}
           ></Shelf>
         );
       })}

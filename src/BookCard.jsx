@@ -4,6 +4,9 @@ import { SHELVES } from './App';
 function BookCard({ book, onShelfChange }) {
   const { thumbnail, title, authors, pageCount, shelf } = book;
 
+  // shelf is the default for this card
+  const otherOptions = SHELVES.filter(s => s !== shelf);
+
   return (
     <div className="book-container">
       <div
@@ -26,10 +29,10 @@ function BookCard({ book, onShelfChange }) {
             onShelfChange(book, e.target.value);
           }}
         >
-          <option value={camelToKebabCase(shelf)}>
+          <option defaultValue={camelToKebabCase(shelf)}>
             {camelToRegularCase(shelf)}
           </option>
-          {SHELVES.map(shelf => {
+          {otherOptions.map(shelf => {
             return (
               <option key={shelf} value={shelf}>
                 {camelToRegularCase(shelf)}

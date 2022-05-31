@@ -24,7 +24,7 @@ html {
 html,
 body {
   margin: 0;
-  padding: 0;
+  padding: 4rem;
   height: 100vh;
   background-color: var(--dark);
   color: var(--white);

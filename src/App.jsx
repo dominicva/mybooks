@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
 import Nav from './Nav';
 import Shelf from './Shelf';
 import { getAll } from './booksAPI';
 import normalize from './utils/normalize';
 import './App.css';
 import BookCard from './BookCard';
+import { camelToKebabCase, camelToRegularCase } from './utils/strings';
 
 export const SHELVES = ['currentlyReading', 'wantToRead', 'read'];
 
@@ -21,67 +21,79 @@ function FilterableBookList({ books }) {
   );
 }
 
-function BookPreview({ book }) {
-  const { title, authors, subtitle } = book;
+function BookPreview({ book, onShelfChange }) {
+  const { title, authors, pageCount, shelf, thumbnail } = book;
   return (
-    <tr>
-      <td>
-        {title} {subtitle ? `– ${subtitle}` : ''}
-      </td>
-      <td>{authors.join(' & ')}</td>
-    </tr>
+    <div className="book-container">
+      <div
+        className="thumbnail"
+        style={{ backgroundImage: `url(${thumbnail})` }}
+      ></div>
+      <div className="metadata">
+        <h3>{title}</h3>
+        <h4>{authors.join(' & ')}</h4>
+        <p>{pageCount} pages</p>
+      </div>
+      <label htmlFor="shelf-select">Move shelf</label>
+      <select
+        id="shelf-select"
+        onChange={e => {
+          onShelfChange(book, e.target.value);
+        }}
+      >
+        <option defaultValue={camelToKebabCase(shelf)}>
+          {camelToRegularCase(shelf)}
+        </option>
+        {SHELVES.filter(s => s !== shelf).map(shelf => {
+          return (
+            <option key={shelf} value={shelf}>
+              {camelToRegularCase(shelf)}
+            </option>
+          );
+        })}
+      </select>
+    </div>
   );
 }
 
 function Results({ books, filterText }) {
-  const filterTxt = filterText.toLowerCase();
+  const normalizedFilterText = filterText.toLowerCase();
 
-  const rows = [];
+  const booksToRender = [];
 
   books.forEach(book => {
     if (
-      book.title.toLowerCase().indexOf(filterTxt) === -1 &&
+      book.title.toLowerCase().indexOf(normalizedFilterText) === -1 &&
       book.authors
         .join(' ')
         .replaceAll(/[^a-zA-Z]/g, '')
         .toLowerCase()
-        .indexOf(filterTxt) === -1
+        .indexOf(normalizedFilterText) === -1
     ) {
       return;
     }
 
-    rows.push(<BookPreview book={book} key={book.id} />);
+    booksToRender.push(<BookPreview book={book} key={book.id} />);
   });
 
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Authors</th>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
-    </table>
-  );
+  return <section id="results">{booksToRender}</section>;
 }
 
 function SearchBar({ filterText, onFilterTextChange }) {
   return (
-    <form>
+    <>
+      <label htmlFor="filter-input">Filter books</label>
       <input
+        id="filer-input"
         type="text"
         value={filterText}
-        placeholder="Search..."
         onChange={e => onFilterTextChange(e.target.value)}
       />
-    </form>
+    </>
   );
 }
 
 function App() {
-  // const [filterText, setFilterText] = useState('');
-
   const [books, setBooks] = useState(
     () => JSON.parse(window.localStorage.getItem('books')) ?? []
   );
@@ -99,14 +111,14 @@ function App() {
     !storedLocally && fetchBooks();
   }, []);
 
-  // function handleShelfChange(book, newShelf) {
-  //   const otherBooks = books.filter(b => b.id !== book.id);
-  //   const updatedBook = { ...book, shelf: newShelf };
-  //   const newState = [...otherBooks, updatedBook];
+  function handleShelfChange(book, newShelf) {
+    const otherBooks = books.filter(b => b.id !== book.id);
+    const updatedBook = { ...book, shelf: newShelf };
+    const newState = [...otherBooks, updatedBook];
 
-  //   window.localStorage.setItem('books', JSON.stringify(newState));
-  //   setBooks(newState);
-  // }
+    window.localStorage.setItem('books', JSON.stringify(newState));
+    setBooks(newState);
+  }
 
   // function handleFilter(e) {
   //   const query = e.target.value;

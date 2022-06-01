@@ -4,6 +4,7 @@ import Nav from './Nav';
 import Shelf from './Shelf';
 import Filter from './Filter';
 import BookCard from './BookCard';
+import Results from './Results';
 import { camelToKebabCase, camelToRegularCase } from './utils/strings';
 import { getAll } from './booksAPI';
 import normalize from './utils/normalize';
@@ -24,31 +25,6 @@ function FilterableBookList({ books, onShelfChange }) {
       />
     </div>
   );
-}
-
-function Results({ books, filterText, onShelfChange }) {
-  const normalizedFilterText = filterText.toLowerCase();
-
-  const booksToRender = [];
-
-  books.forEach(book => {
-    if (
-      book.title.toLowerCase().indexOf(normalizedFilterText) === -1 &&
-      book.authors
-        .join(' ')
-        .replaceAll(/[^a-zA-Z]/g, '')
-        .toLowerCase()
-        .indexOf(normalizedFilterText) === -1
-    ) {
-      return;
-    }
-
-    booksToRender.push(
-      <BookCard key={book.id} book={book} onShelfChange={onShelfChange} />
-    );
-  });
-
-  return <section id="results">{booksToRender}</section>;
 }
 
 function App() {

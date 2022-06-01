@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import Shelf from './Shelf';
 import Nav from './Nav';
+import Shelf from './Shelf';
 import { getAll } from './booksAPI';
 import normalize from './utils/normalize';
 import './App.css';
@@ -8,24 +8,30 @@ import './App.css';
 export const SHELVES = ['currentlyReading', 'wantToRead', 'read'];
 
 function App() {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState(
+    () => JSON.parse(window.localStorage.getItem('books')) ?? []
+  );
 
   useEffect(() => {
     const fetchBooks = async () => {
       const allBooks = await getAll();
       const normalized = normalize(allBooks);
 
+      window.localStorage.setItem('books', JSON.stringify(normalized));
       setBooks(normalized);
     };
 
-    fetchBooks();
+    const storedLocally = window.localStorage.getItem('books');
+    !storedLocally && fetchBooks();
   }, []);
 
   function handleShelfChange(book, newShelf) {
     const otherBooks = books.filter(b => b.id !== book.id);
     const updatedBook = { ...book, shelf: newShelf };
+    const newState = [...otherBooks, updatedBook];
 
-    setBooks([...otherBooks, updatedBook]);
+    window.localStorage.setItem('books', JSON.stringify(newState));
+    setBooks(newState);
   }
 
   return (
@@ -41,7 +47,7 @@ function App() {
             <Shelf
               key={shelf}
               shelf={shelf}
-              books={books.filter(b => b.shelf === shelf)}
+              books={books?.filter(b => b.shelf === shelf)}
               onShelfChange={handleShelfChange}
             ></Shelf>
           );

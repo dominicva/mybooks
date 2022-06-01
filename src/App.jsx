@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
 import Nav from './Nav';
 import Shelf from './Shelf';
 import { getAll } from './booksAPI';
@@ -40,8 +42,11 @@ function App() {
       <main>
         <Nav />
         <header>
-          <h1>My Reads</h1>
-          <hr />
+          <div>
+            <h1>My Reads</h1>
+            <hr />
+          </div>
+          <Link to="/search">Add book</Link>
         </header>
         {SHELVES.map(shelf => {
           return (

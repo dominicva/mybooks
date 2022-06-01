@@ -1,35 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Nav from './Nav';
+import FilterMode from './FilterMode';
 import Shelf from './Shelf';
-import Filter from './Filter';
-import Results from './Results';
 import { getAll } from './utils/booksAPI';
 import normalize from './utils/normalize';
 import './App.css';
 
 export const SHELVES = ['currentlyReading', 'wantToRead', 'read'];
 
-function FilterableBookList({ books, onShelfChange }) {
-  const [filterText, setFilterText] = useState('');
-
-  return (
-    <div>
-      <Filter filterText={filterText} onFilterTextChange={setFilterText} />
-      <Results
-        books={books}
-        filterText={filterText}
-        onShelfChange={onShelfChange}
-      />
-    </div>
-  );
-}
-
 function App() {
   const [books, setBooks] = useState(
     () => JSON.parse(window.localStorage.getItem('books')) ?? []
   );
-
   const [filterResults, setFilterResults] = useState(false);
 
   useEffect(() => {
@@ -73,7 +56,7 @@ function App() {
           {filterResults ? 'Bookshelf' : 'Filter'} mode
         </button>
         {filterResults ? (
-          <FilterableBookList books={books} onShelfChange={handleShelfChange} />
+          <FilterMode books={books} onShelfChange={handleShelfChange} />
         ) : (
           SHELVES.map(shelf => {
             return (

@@ -7,6 +7,8 @@
   --primary-lighter: #7278e8;
   --gray: #545680;
   --white: #fff;
+  --fresh-berry: #ff6978;
+  --fresh-sea: #06d6a0;
   --heading: 'Poppins', sans-serif;
   --sub-heading: 'Fanwood Text', serif;
   --regular-text: 'Noto Sans', sans-serif;
@@ -83,6 +85,10 @@ p,
 span,
 li {
   font-family: var(--regular-text);
+}
+
+a {
+  color: var(--fresh-sea);
 }
 
 #root {

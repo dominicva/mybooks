@@ -2,61 +2,31 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Nav from './Nav';
 import Shelf from './Shelf';
+import Filter from './Filter';
+import BookCard from './BookCard';
+import { camelToKebabCase, camelToRegularCase } from './utils/strings';
 import { getAll } from './booksAPI';
 import normalize from './utils/normalize';
 import './App.css';
-import BookCard from './BookCard';
-import { camelToKebabCase, camelToRegularCase } from './utils/strings';
 
 export const SHELVES = ['currentlyReading', 'wantToRead', 'read'];
 
-function FilterableBookList({ books }) {
+function FilterableBookList({ books, onShelfChange }) {
   const [filterText, setFilterText] = useState('');
 
   return (
     <div>
-      <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
-      <Results books={books} filterText={filterText} />
+      <Filter filterText={filterText} onFilterTextChange={setFilterText} />
+      <Results
+        books={books}
+        filterText={filterText}
+        onShelfChange={onShelfChange}
+      />
     </div>
   );
 }
 
-function BookPreview({ book, onShelfChange }) {
-  const { title, authors, pageCount, shelf, thumbnail } = book;
-  return (
-    <div className="book-container">
-      <div
-        className="thumbnail"
-        style={{ backgroundImage: `url(${thumbnail})` }}
-      ></div>
-      <div className="metadata">
-        <h3>{title}</h3>
-        <h4>{authors.join(' & ')}</h4>
-        <p>{pageCount} pages</p>
-      </div>
-      <label htmlFor="shelf-select">Move shelf</label>
-      <select
-        id="shelf-select"
-        onChange={e => {
-          onShelfChange(book, e.target.value);
-        }}
-      >
-        <option defaultValue={camelToKebabCase(shelf)}>
-          {camelToRegularCase(shelf)}
-        </option>
-        {SHELVES.filter(s => s !== shelf).map(shelf => {
-          return (
-            <option key={shelf} value={shelf}>
-              {camelToRegularCase(shelf)}
-            </option>
-          );
-        })}
-      </select>
-    </div>
-  );
-}
-
-function Results({ books, filterText }) {
+function Results({ books, filterText, onShelfChange }) {
   const normalizedFilterText = filterText.toLowerCase();
 
   const booksToRender = [];
@@ -73,24 +43,12 @@ function Results({ books, filterText }) {
       return;
     }
 
-    booksToRender.push(<BookPreview book={book} key={book.id} />);
+    booksToRender.push(
+      <BookCard key={book.id} book={book} onShelfChange={onShelfChange} />
+    );
   });
 
   return <section id="results">{booksToRender}</section>;
-}
-
-function SearchBar({ filterText, onFilterTextChange }) {
-  return (
-    <>
-      <label htmlFor="filter-input">Filter books</label>
-      <input
-        id="filer-input"
-        type="text"
-        value={filterText}
-        onChange={e => onFilterTextChange(e.target.value)}
-      />
-    </>
-  );
 }
 
 function App() {
@@ -146,7 +104,7 @@ function App() {
             onChange={handleFilter}
           />
         </section> */}
-        <FilterableBookList books={books} />
+        <FilterableBookList books={books} onShelfChange={handleShelfChange} />
         {/* {SHELVES.map(shelf => {
           return (
             <Shelf

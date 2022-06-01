@@ -4,7 +4,7 @@ import { SHELVES } from './App';
 function BookCard({ book, onShelfChange }) {
   const { thumbnail, title, authors, pageCount, shelf } = book;
 
-  // shelf is the default for this card
+  // `${shelf}` is the default for this card
   const otherOptions = SHELVES.filter(s => s !== shelf);
 
   return (
@@ -18,10 +18,8 @@ function BookCard({ book, onShelfChange }) {
         <h4>{authors.join(' & ')}</h4>
         <p>{pageCount} pages</p>
       </div>
-      {/* <div>{camelToRegularCase(shelf)}</div> */}
 
       <label htmlFor="shelf-select">
-        {/* Move shelf */}
         <select
           name="shelves"
           id="shelf-select"

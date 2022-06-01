@@ -11,6 +11,7 @@ function App() {
   const [books, setBooks] = useState(
     () => JSON.parse(window.localStorage.getItem('books')) ?? []
   );
+  const totalBooks = books.length;
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -47,7 +48,8 @@ function App() {
             <Shelf
               key={shelf}
               shelf={shelf}
-              books={books?.filter(b => b.shelf === shelf)}
+              books={books.filter(b => b.shelf === shelf)}
+              totalBooks={totalBooks}
               onShelfChange={handleShelfChange}
             ></Shelf>
           );

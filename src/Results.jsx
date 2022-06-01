@@ -10,7 +10,7 @@ function Results({ books, filterText, onShelfChange }) {
       book.title.toLowerCase().indexOf(normalizedFilterText) === -1 &&
       book.authors
         .join(' ')
-        .replaceAll(/[^a-zA-Z]/g, '')
+        .replaceAll(/[^a-zA-Z|]/g, '')
         .toLowerCase()
         .indexOf(normalizedFilterText) === -1
     ) {

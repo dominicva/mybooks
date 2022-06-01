@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Nav from './Nav';
-import FilterMode from './FilterMode';
-import Shelf from './Shelf';
+import Nav from './components/Nav';
+import FilterMode from './components/FilterMode';
+import Shelf from './components/Shelf';
 import { getAll } from './utils/booksAPI';
 import normalize from './utils/normalize';
 import './App.css';

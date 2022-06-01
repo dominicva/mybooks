@@ -1,3 +1,20 @@
+nav {
+  grid-column: span 2;
+  display: flex;
+  height: 2rem;
+  align-items: center;
+  margin: 2rem 0 1rem;
+}
+#logo {
+  background-image: url('./assets/myreads-logo.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 5rem;
+  width: 5rem;
+  color: transparent;
+}
+
 header {
   grid-column: span 2;
   margin-bottom: 2rem;

@@ -1,5 +1,5 @@
 import BookCard from './BookCard';
-import { camelToRegularCase } from './utils/strings';
+import { camelToRegularCase } from '../utils/strings';
 
 function Shelf({ shelf, books, totalBooks, onShelfChange }) {
   const shelfHeading = camelToRegularCase(shelf);

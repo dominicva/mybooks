@@ -1,5 +1,5 @@
-import { camelToKebabCase, camelToRegularCase } from './utils/strings';
-import { SHELVES } from './App';
+import { camelToKebabCase, camelToRegularCase } from '../utils/strings';
+import { SHELVES } from '../App';
 
 function BookCard({ book, onShelfChange }) {
   const { title, authors, pageCount, shelf, thumbnail } = book;
